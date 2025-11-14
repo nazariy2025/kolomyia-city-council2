@@ -17,13 +17,13 @@ const Header: React.FC<HeaderProps> = ({ isHighContrast, toggleHighContrast, isL
 
     const toggleLanguage = () => setLanguage(lang => lang === 'UA' ? 'EN' : 'UA');
 
-    const topBarBgClass = isHighContrast ? 'bg-gray-800 text-white' : 'bg-brand-blue-light text-brand-blue-dark';
+    const topBarBgClass = isHighContrast ? 'bg-gray-900 text-white' : 'bg-brand-blue-light text-brand-blue-dark';
     const mainHeaderBgClass = isHighContrast ? 'bg-black text-white' : 'bg-white text-gray-800';
     const accessibilityButtonClass = (isActive: boolean) => 
         `flex items-center gap-1.5 px-3 py-1 rounded-full transition-colors duration-200 ${
             isActive 
                 ? (isHighContrast ? 'bg-brand-yellow text-black' : 'bg-brand-blue text-white')
-                : (isHighContrast ? 'bg-gray-700 hover:bg-gray-600' : 'bg-white hover:bg-gray-200')
+                : (isHighContrast ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200')
         }`;
     
 
@@ -42,30 +42,24 @@ const Header: React.FC<HeaderProps> = ({ isHighContrast, toggleHighContrast, isL
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
-                    <a href="#" className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100">Повідомити про проблему</a>
-                    <button className="relative">
-                        <Icon><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" /></svg></Icon>
-                        <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">3</span>
-                    </button>
-                    <button onClick={toggleHighContrast} className={accessibilityButtonClass(isHighContrast)}>
+                    <button onClick={toggleHighContrast} className={accessibilityButtonClass(isHighContrast)} aria-pressed={isHighContrast}>
                         <Icon className="w-5 h-5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm-5-8a5 5 0 0 0 5 5V7a5 5 0 0 0-5 5Z" clipRule="evenodd" /></svg></Icon>
                         <span>Контраст</span>
                     </button>
-                     <button onClick={toggleLargeText} className={accessibilityButtonClass(isLargeText)}>
-                        <Icon className="w-5 h-5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M3.5 4.5a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1h-13ZM9 6.5a.5.5 0 0 1 .5.5v5.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L9 12.793V7a.5.5 0 0 1 .5-.5Z" /></svg></Icon>
+                     <button onClick={toggleLargeText} className={accessibilityButtonClass(isLargeText)} aria-pressed={isLargeText}>
+                        <Icon className="w-5 h-5"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M9.146 11.146a.5.5 0 0 1 .708 0L10 11.293l.146-.147a.5.5 0 0 1 .708.708L10.707 12l.147.146a.5.5 0 0 1-.708.708L10 12.707l-.146.147a.5.5 0 0 1-.708-.708L9.293 12l-.147-.146a.5.5 0 0 1 0-.708zM1 4.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM1 7.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/></svg></Icon>
                         <span>Розмір</span>
                     </button>
                     <button onClick={toggleLanguage} className="font-semibold">{language}</button>
-                    <a href="#" className="flex items-center gap-2 px-3 py-1.5 bg-brand-blue text-white rounded-full shadow-sm hover:bg-brand-blue-dark">Увійти</a>
                 </div>
             </div>
 
             {/* Main Header */}
             <div className={`flex justify-between items-center px-4 lg:px-8 py-4 ${mainHeaderBgClass} transition-colors duration-300`}>
-                <div className="flex items-center gap-4">
+                <a href="/" className="flex items-center gap-4">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Coat_of_Arms_of_Kolomyia.svg/129px-Coat_of_Arms_of_Kolomyia.svg.png" alt="Герб Коломиї" className="h-12 lg:h-16"/>
                     <span className="font-bold text-lg lg:text-xl leading-tight">Коломийська<br/>міська рада</span>
-                </div>
+                </a>
 
                 <nav className="hidden lg:flex items-center gap-6">
                     {NAV_LINKS.map(link => (
@@ -81,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({ isHighContrast, toggleHighContrast, isL
                 </div>
 
                 <div className="lg:hidden">
-                    <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Відкрити меню">
+                    <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Відкрити меню" aria-expanded={isMobileMenuOpen}>
                         <Icon className="w-8 h-8"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg></Icon>
                     </button>
                 </div>
@@ -102,4 +96,3 @@ const Header: React.FC<HeaderProps> = ({ isHighContrast, toggleHighContrast, isL
 };
 
 export default Header;
-

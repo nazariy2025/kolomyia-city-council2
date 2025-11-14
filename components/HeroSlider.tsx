@@ -1,16 +1,18 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { HERO_SLIDER_NEWS } from '../constants';
 
 const HeroSlider: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % HERO_SLIDER_NEWS.length);
-        }, 5000);
-        return () => clearInterval(timer);
+    const nextSlide = useCallback(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % HERO_SLIDER_NEWS.length);
     }, []);
+
+    useEffect(() => {
+        const timer = setInterval(nextSlide, 5000);
+        return () => clearInterval(timer);
+    }, [nextSlide]);
 
     const goToSlide = (index: number) => {
         setCurrentIndex(index);
@@ -19,14 +21,15 @@ const HeroSlider: React.FC = () => {
     const currentSlide = HERO_SLIDER_NEWS[currentIndex];
 
     return (
-        <div className="relative w-full h-[60vh] max-h-[600px] overflow-hidden">
+        <section className="relative w-full h-[60vh] max-h-[600px] overflow-hidden" aria-roledescription="carousel" aria-label="Головні новини">
             {HERO_SLIDER_NEWS.map((slide, index) => (
                 <div
                     key={slide.id}
                     className={`absolute inset-0 transition-opacity duration-1000 ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
+                    aria-hidden={index !== currentIndex}
                 >
                     <img src={slide.imageUrl} alt={slide.title} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-black/50"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
                 </div>
             ))}
             
@@ -41,17 +44,18 @@ const HeroSlider: React.FC = () => {
                 </div>
             </div>
 
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2" role="group" aria-label="Навігація слайдера">
                 {HERO_SLIDER_NEWS.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => goToSlide(index)}
                         className={`w-3 h-3 rounded-full transition-colors ${index === currentIndex ? 'bg-brand-yellow' : 'bg-white/50 hover:bg-white/80'}`}
                         aria-label={`Перейти до слайду ${index + 1}`}
+                        aria-current={index === currentIndex}
                     />
                 ))}
             </div>
-        </div>
+        </section>
     );
 };
 
